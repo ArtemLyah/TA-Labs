@@ -39,8 +39,18 @@
             }
             else if (index == 0)
             {
-                newObj.next = head;
-                head = newObj;
+                LinkedNodes buffer = new()
+                {
+                    PIB = head.PIB,
+                    FirstQuestion = head.FirstQuestion,
+                    SecondQuestion = head.SecondQuestion,
+                    next = head.next
+                };
+
+                head.PIB = newObj.PIB;
+                head.FirstQuestion = newObj.FirstQuestion;
+                head.SecondQuestion = newObj.SecondQuestion;
+                head.next = buffer;
             }
             else
             {
@@ -54,7 +64,7 @@
                 next_point.next = newObj;
             }
         }
-        
+
         public static void RemoveLast(LinkedNodes head)
         {
             LinkedNodes next_point = head;
@@ -74,7 +84,24 @@
             }
             else if (index == 0)
             {
-                head = head.next;
+                if (numOfElem == 1)
+                {
+                    head = null;
+                    return;
+                }
+
+                LinkedNodes buffer = new()
+                {
+                    PIB = head.next.PIB,
+                    FirstQuestion = head.next.FirstQuestion,
+                    SecondQuestion = head.next.SecondQuestion,
+                    next = head.next.next
+                };
+
+                head.PIB = buffer.PIB;
+                head.FirstQuestion = buffer.FirstQuestion;
+                head.SecondQuestion = buffer.SecondQuestion;
+                head.next = buffer.next;
             }
             else if (index == (numOfElem - 1))
             {
