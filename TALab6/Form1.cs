@@ -19,8 +19,9 @@ namespace TALab6
         {
             InitializeComponent();
         }
-        public HashTableLinear<Person> hashTable = new HashTableLinear<Person>(30);
-        public HashTableQuadratic<Person> hashTable2 = new HashTableQuadratic<Person>(30);
+        private static int hashTableSize = 30;
+        public HashTableLinear<Person> hashTable = new HashTableLinear<Person>(hashTableSize);
+        public HashTableQuadratic<Person> hashTable2 = new HashTableQuadratic<Person>(hashTableSize);
         public void ListOverwrite1(ListBox listbox)
         {
             listbox.Items.Clear();
@@ -110,12 +111,15 @@ namespace TALab6
                 MessageBox.Show("Введено некоректні дані!");
             else
             {
-                if (hashTable.actualSize * 100 / hashTable.items.Length > 75)
+                if (hashTable.actualSize * 100 / hashTable.items.Length > 90)
                 {
-                    hashTable = ResizeHashTable(hashTable);
-                    MessageBox.Show("Хеш-таблицю розширено!");
+                    hashTable = RehashHashTable(hashTable);
+                    if(hashTable.actualSize == hashTableSize)
+                    {
+                        MessageBox.Show("Хеш-таблицю заповнено!");
+                        return;
+                    }
                 }
-                    
                 int variant = hashTable.Add(new Person(personData[0], personData[1], personData[2]));
                 if (variant == 1)
                 {
@@ -141,9 +145,9 @@ namespace TALab6
                 ListOverwrite1(listBoxKeysFirst);
             }
         }
-        public HashTableLinear<Person> ResizeHashTable(HashTableLinear<Person> hashTable)
+        public HashTableLinear<Person> RehashHashTable(HashTableLinear<Person> hashTable)
         {
-            var hashTableNew = new HashTableLinear<Person>(hashTable.items.Length * 2);
+            var hashTableNew = new HashTableLinear<Person>(hashTable.items.Length);
             foreach (var item in hashTable.items)
             {
                 if (item == null) continue;
@@ -184,10 +188,14 @@ namespace TALab6
                 MessageBox.Show("Введено некоректні дані!");
             else
             {
-                if (hashTable2.actualSize * 100 / hashTable2.items.Length > 75)
+                if (hashTable2.actualSize * 100 / hashTable2.items.Length > 90)
                 {
-                    hashTable2 = ResizeHashTable2(hashTable2);
-                    MessageBox.Show("Хеш-таблицю розширено!");
+                    hashTable2 = RehashHashTable2(hashTable2);
+                    if (hashTable2.actualSize == hashTableSize)
+                    {
+                        MessageBox.Show("Хеш-таблицю заповнено!");
+                        return;
+                    }
                 }
 
                 int variant = hashTable2.Add(new Person(personData[0], personData[1], personData[2]));
@@ -199,7 +207,7 @@ namespace TALab6
                 if (variant == 0)
                     MessageBox.Show("Людину вже додано до таблиці!");
                 if (variant == -1)
-                    MessageBox.Show("Таблицю переповнено");
+                    MessageBox.Show("Для цієї людини не знайдено вільної комірки!");
             }
         }
 
@@ -217,9 +225,9 @@ namespace TALab6
                 ListOverwrite2(listBoxKeysSecond);
             }
         }
-        public HashTableQuadratic<Person> ResizeHashTable2(HashTableQuadratic<Person> hashTable2)
+        public HashTableQuadratic<Person> RehashHashTable2(HashTableQuadratic<Person> hashTable2)
         {
-            var hashTableNew = new HashTableQuadratic<Person>(hashTable2.items.Length * 2);
+            var hashTableNew = new HashTableQuadratic<Person>(hashTable2.items.Length);
             foreach (var item in hashTable2.items)
             {
                 if (item == null) continue;

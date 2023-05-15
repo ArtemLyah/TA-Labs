@@ -34,6 +34,8 @@ namespace TALab6
                         return 1;
                     }
                     step = (int)Math.Pow(counter, 2);
+                    if (step < 0)
+                        return -1;
                     counter++;
                     changeableKey = (key + step) % items.Length;
                 } while (items[changeableKey] != null);
