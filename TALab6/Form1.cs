@@ -19,7 +19,7 @@ namespace TALab6
         {
             InitializeComponent();
         }
-        private static int hashTableSize = 30;
+        private static int hashTableSize = 24;
         public HashTableLinear<Person> hashTable = new HashTableLinear<Person>(hashTableSize);
         public HashTableQuadratic<Person> hashTable2 = new HashTableQuadratic<Person>(hashTableSize);
         public void ListOverwrite1(ListBox listbox)
