@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using TALab10.DataSorting;
 
 namespace TALab10
@@ -66,11 +59,11 @@ namespace TALab10
             watch.Stop();
             labelHeapSort.Text = watch.Elapsed.ToString();
             watch.Restart();
-            SortingAlgorithms.LSDSort(listCopy4);
+            SortingAlgorithms.LSDSort(listCopy4, maxNumber);
             watch.Stop();
             labelLSDSort.Text = watch.Elapsed.ToString();
             watch.Restart();
-            SortingAlgorithms.MSDSort(listCopy5);
+            SortingAlgorithms.MSDSort(listCopy5, maxNumber);
             watch.Stop();
             labelMSDSort.Text = watch.Elapsed.ToString();
 

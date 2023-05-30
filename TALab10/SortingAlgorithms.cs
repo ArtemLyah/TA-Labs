@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TALab10.DataSorting
 {
@@ -179,14 +174,69 @@ namespace TALab10.DataSorting
             }
         }
 
-        public static void LSDSort(List<int> array)
+        public static void LSDSort(List<int> array, int maxNumber)
         {
+            if (array.Count <= 1) return;
 
+            for (int exponent = 1; maxNumber / exponent > 0; exponent *= 10)
+            {
+                var outputArr = new List<int>(new int[array.Count]);
+                var occurences = new List<int>(new int[10]);
+
+                for (int i = 0; i < array.Count; i++)
+                    occurences[(array[i] / exponent) % 10]++;
+                for (int i = 1; i < 10; i++)
+                    occurences[i] += occurences[i - 1];
+                for (int i = array.Count - 1; i >= 0; i--)
+                {
+                    outputArr[occurences[(array[i] / exponent) % 10] - 1] = array[i];
+                    occurences[(array[i] / exponent) % 10]--;
+                }
+                for (int i = 0; i < array.Count; i++)
+                    array[i] = outputArr[i];
+            }
         }
 
-        public static void MSDSort(List<int> array)
+        public static void MSDSort(List<int> array, int maxNumber)
         {
+            if (array.Count <= 1) return;
 
+            int exp = (int)Math.Pow(10, maxNumber.ToString().Length - 1);
+
+            MSD(array, exp);
+        }
+
+        private static void MSD(List<int> array, int exponent)
+        {
+            if (exponent < 1 || array.Count <= 1) return;
+
+            var outputArr = new List<int>(new int[array.Count]);
+            var occurences = new List<int>(new int[10]);
+
+            for (int i = 0; i < array.Count; i++)
+                occurences[(array[i] / exponent) % 10]++;
+            for (int i = 1; i < 10; i++)
+                occurences[i] += occurences[i - 1];
+            for (int i = array.Count - 1; i >= 0; i--)
+            {
+                outputArr[occurences[(array[i] / exponent) % 10] - 1] = array[i];
+                occurences[(array[i] / exponent) % 10]--;
+            }
+            for (int i = 0; i < array.Count; i++)
+                array[i] = outputArr[i];
+
+            var buffer = new List<int>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                var partArr = new List<int>();
+                partArr.AddRange(array.Where(x => (x / (10 * exponent) % 10 == i)));
+                MSD(partArr, exponent / 10);
+                buffer.AddRange(partArr);
+            }
+
+            array.Clear();
+            array.AddRange(buffer);
         }
     }
 }
