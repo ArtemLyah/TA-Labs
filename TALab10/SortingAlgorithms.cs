@@ -6,6 +6,9 @@ namespace TALab10.DataSorting
 {
     public class SortingAlgorithms
     {
+        //public static List<string> timeLSD = new List<string>();
+        //public static List<TimeSpan> timeMSD = new List<TimeSpan>();
+
         public static void BubbleSort(List<int> array)
         {
             if (array.Count <= 1) return;
@@ -178,22 +181,14 @@ namespace TALab10.DataSorting
         {
             if (array.Count <= 1) return;
 
+            //var watch = new System.Diagnostics.Stopwatch();
+
             for (int exponent = 1; maxNumber / exponent > 0; exponent *= 10)
             {
-                var outputArr = new List<int>(new int[array.Count]);
-                var occurences = new List<int>(new int[10]);
-
-                for (int i = 0; i < array.Count; i++)
-                    occurences[(array[i] / exponent) % 10]++;
-                for (int i = 1; i < 10; i++)
-                    occurences[i] += occurences[i - 1];
-                for (int i = array.Count - 1; i >= 0; i--)
-                {
-                    outputArr[occurences[(array[i] / exponent) % 10] - 1] = array[i];
-                    occurences[(array[i] / exponent) % 10]--;
-                }
-                for (int i = 0; i < array.Count; i++)
-                    array[i] = outputArr[i];
+                //watch.Restart();
+                RadixElemSwap(array, exponent);
+                //watch.Stop();
+                //timeLSD.Add(watch.Elapsed.ToString());
             }
         }
 
@@ -202,14 +197,44 @@ namespace TALab10.DataSorting
             if (array.Count <= 1) return;
 
             int exp = (int)Math.Pow(10, maxNumber.ToString().Length - 1);
+            //deep = maxNumber.ToString().Length;
+            //for (int i = 0; i < deep; i++)
+            //{
+            //    timeMSD.Add(TimeSpan.Zero);
+            //}
 
             MSD(array, exp);
         }
+
+        //private static int deep;
 
         private static void MSD(List<int> array, int exponent)
         {
             if (exponent < 1 || array.Count <= 1) return;
 
+            //var watch = new System.Diagnostics.Stopwatch();
+
+            //watch.Start();
+            RadixElemSwap(array, exponent);
+            //watch.Stop();
+            //timeMSD[(int)Math.Log10(exponent)] += watch.Elapsed;
+
+            var buffer = new List<int>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                var partArr = new List<int>();
+                partArr.AddRange(array.Where(x => (x / (10 * exponent) % 10 == i)));
+                MSD(partArr, exponent / 10);
+                buffer.AddRange(partArr);
+            }
+
+            array.Clear();
+            array.AddRange(buffer);
+        }
+
+        private static void RadixElemSwap(List<int> array, int exponent)
+        {
             var outputArr = new List<int>(new int[array.Count]);
             var occurences = new List<int>(new int[10]);
 
@@ -224,19 +249,6 @@ namespace TALab10.DataSorting
             }
             for (int i = 0; i < array.Count; i++)
                 array[i] = outputArr[i];
-
-            var buffer = new List<int>();
-
-            for (int i = 0; i < 10; i++)
-            {
-                var partArr = new List<int>();
-                partArr.AddRange(array.Where(x => (x / (10 * exponent) % 10 == i)));
-                MSD(partArr, exponent / 10);
-                buffer.AddRange(partArr);
-            }
-
-            array.Clear();
-            array.AddRange(buffer);
         }
     }
 }

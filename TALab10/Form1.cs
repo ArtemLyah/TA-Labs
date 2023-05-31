@@ -72,6 +72,16 @@ namespace TALab10
                 listBoxOutput.Items.Add(i.ToString());
             }
 
+            //foreach (string time in SortingAlgorithms.timeLSD)
+            //{
+            //    MessageBox.Show(time);
+            //}
+
+            //for (int i = SortingAlgorithms.timeMSD.Count - 1; i >= 0; i--)
+            //{
+            //    MessageBox.Show(SortingAlgorithms.timeMSD[i].ToString());
+            //}
+
             listCopy1.Clear();
             listCopy2.Clear();
             listCopy3.Clear();
@@ -156,11 +166,23 @@ namespace TALab10
                 MessageBox.Show("Файл не містить масиву!");
             }
 
+            bool isFirstElem = true;
+
             while (line != null)
             {
                 try
                 {
                     listOfTreasures.Add(int.Parse(line));
+
+                    if (isFirstElem )
+                    {
+                        maxNumber = int.Parse(line);
+                        isFirstElem = false;
+                    }
+                    else
+                    {
+                        if (int.Parse(line) > maxNumber) maxNumber = int.Parse(line);
+                    }
                 }
                 catch (FormatException)
                 {
