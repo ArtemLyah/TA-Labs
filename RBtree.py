@@ -1,34 +1,48 @@
+from Tree import Tree, Node
 from enum import Enum
 
 class Color(Enum):
     BLACK = "BLACK"
     RED = "RED"
 
-class Node():
+class RBNode(Node):
     def __init__(self, value):
         self.value = value
         self.parent = None
         self.left = None
         self.right = None
-        self.color = 1
+        self.color = Color.RED
+    
+    def __eq__(self, __o: Node) -> bool:
+        if __o == None:
+            return self.value == 0 \
+                and self.left == None \
+                and self.right == None \
+                and self.color == Color.BLACK
+        else:
+            return id(__o) == id(self)
 
 # Define R-B Tree
-class Tree():
+class RBTree(Tree):
     def __init__(self):
-        self.nil = Node(0)
+        self.nil = RBNode(0)
         self.nil.color = Color.BLACK
-        self.nil.left = None
-        self.nil.right = None
         self.root = self.nil
 
+    def search(self, value):
+        node = self.root
+        while node != None and node.value != value:
+            if value > node.value:
+                node = node.right
+            else:
+                node = node.left
+        return node
+        
     # Insert New Node
-    def insertNode(self, value):
-        newNode = Node(value)
-        newNode.parent = None
-        newNode.value = value
+    def insert(self, value):
+        newNode = RBNode(value)
         newNode.left = self.nil
         newNode.right = self.nil
-        newNode.color = Color.RED
 
         parent = None
         node = self.root
@@ -127,7 +141,7 @@ class Tree():
                 if brother.color == Color.RED:
                     brother.color = Color.BLACK
                     node.parent.color = Color.RED
-                    self.leftRightRotate (node.parent)
+                    self.leftRightRotate(node.parent)
                     brother = node.parent.right
                 if brother.left.color == Color.BLACK and brother.right.color == Color.BLACK:
                     brother.color = Color.RED
@@ -223,46 +237,3 @@ class Tree():
             minNode.color = nodeToDelete.color
         if nodeColor == Color.BLACK:
             self.fixDelete(node)
-
-
-    # Function to print
-    def __printCall ( self , node , indent , last ) :
-        if node != self.nil :
-            print(indent, end=' ')
-            if last :
-                print ("R----",end= ' ')
-                indent += "     "
-            else :
-                print("L----",end=' ')
-                indent += "|    "
-
-            s_color = "RED" if node.color == 1 else "BLACK"
-            print ( str ( node.value ) + "(" + s_color + ")" )
-            self.__printCall ( node.left , indent , False )
-            self.__printCall ( node.right , indent , True )
-
-    # Function to call print
-def RBprint_tree(node: Node, lines, level=0):
-    if node.value != 0:
-        RBprint_tree(node.left, lines, level + 1)
-        lines.append('-' * 4 * level + '> ' +
-                    str(node.value) + ' ' + ('r' if node.color == Color.RED else 'b'))
-        RBprint_tree(node.right, lines, level + 1)
-        return '\n'.join(lines)
-
-rbTree = Tree()
-rbTree.insertNode(10)
-rbTree.insertNode(11)
-rbTree.insertNode(12)
-rbTree.insertNode(13)
-rbTree.insertNode(8)
-rbTree.insertNode(9)
-rbTree.insertNode(7)
-
-print(RBprint_tree(rbTree.root, []))
-print()
-
-rbTree.delete(8)
-
-print(RBprint_tree(rbTree.root, []))
-print()
