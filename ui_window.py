@@ -83,7 +83,7 @@ class Ui_MainWindow():
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", "Печера леприкона", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"\u0421\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430 \u043f\u0435\u0447\u0435\u0440", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", "Печери зі скарбами", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u0412\u0432\u0435\u0434\u0456\u0442\u044c \u043f\u0435\u0447\u0435\u0440\u0443 \u0437\u0456 \u0441\u043a\u0430\u0440\u0431\u0430\u043c\u0438", None))
         self.addNodeBtn.setText(QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0434\u0430\u0442\u0438 \u043f\u0435\u0447\u0435\u0440\u0443", None))
         self.deleteNodeBtn.setText(QCoreApplication.translate("MainWindow", u"\u0412\u0438\u0434\u0430\u043b\u0438\u0442\u0438 \u043f\u0435\u0447\u0435\u0440\u0443", None))
@@ -95,7 +95,7 @@ class Ui_MainWindow():
         try:
             value = int(value)
         except:
-            self.showMessageBox("Неправильно введено кількість скарбів")
+            self.showMessageBox("Неправильно введено кількість скарбів", QMessageBox.Warning)
             return
         self.serviceTree.insert(value)
         treeText = self.serviceTree.printTree(self.isRedBlueCb.isChecked())
@@ -106,12 +106,13 @@ class Ui_MainWindow():
         try:
             value = int(value)
         except:
-            self.showMessageBox("Неправильно введено кількість скарбів")
+            self.showMessageBox("Неправильно введено кількість скарбів", QMessageBox.Warning)
             return
         self.serviceTree.delete(value)
         treeText = self.serviceTree.printTree(self.isRedBlueCb.isChecked())
         self.textBrowser.setText(treeText)
         self.lineEdit.clear()
+        self.showMessageBox("Печера обвалилася! Скарби втрачені(")
 
     def searchNode(self, value):
         if value == "root" or value == "":
@@ -120,18 +121,18 @@ class Ui_MainWindow():
             try:
                 value = int(value)
             except:
-                self.showMessageBox("Неправильно введено кількість скарбів")
+                self.showMessageBox("Неправильно введено кількість скарбів", QMessageBox.Warning)
                 return
             node = self.serviceTree.search(value, self.isRedBlueCb.isChecked())
             treeText = self.serviceTree.printNode(node, self.isRedBlueCb.isChecked())
         self.textBrowser.setText(treeText)
         self.lineEdit.clear()
     
-    def showMessageBox(self, text):
+    def showMessageBox(self, text, status=QMessageBox.Information):
         msgBox = QMessageBox()
-        msgBox.setIcon(QMessageBox.Warning)
+        msgBox.setIcon(status)
         msgBox.setText(text)
-        msgBox.setWindowTitle("Warning")
+        msgBox.setWindowTitle("Information")
         msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         msgBox.exec()
 
