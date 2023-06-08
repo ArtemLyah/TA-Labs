@@ -44,6 +44,11 @@ class RBTree(Tree):
         newNode.left = self.nil
         newNode.right = self.nil
 
+        if self.root == None:
+            self.root = newNode
+            self.root.color = Color.BLACK 
+            return
+
         parent = None
         node = self.root
         while node != self.nil:
@@ -201,39 +206,39 @@ class RBTree(Tree):
     # Deletion of node
     def delete(self, value):
         node = self.root
-        nodeToDelete = self.nil
+        nodeToReplace = self.nil
         while node != self.nil:
             if node.value == value:
-                nodeToDelete = node
+                nodeToReplace = node
             if node.value <= value:
                 node = node.right
             else:
                 node = node.left
 
-        if nodeToDelete == self.nil:
+        if nodeToReplace == self.nil:
             return
 
-        nodeColor = nodeToDelete.color
-        if nodeToDelete.left == self.nil:
-            node = nodeToDelete.right
-            self.__transplant(nodeToDelete, nodeToDelete.right)
-        elif (nodeToDelete.right == self.nil):
-            node = nodeToDelete.left
-            self.__transplant(nodeToDelete , nodeToDelete.left)
+        nodeColor = nodeToReplace.color
+        if nodeToReplace.left == self.nil:
+            node = nodeToReplace.right
+            self.__transplant(nodeToReplace, nodeToReplace.right)
+        elif (nodeToReplace.right == self.nil):
+            node = nodeToReplace.left
+            self.__transplant(nodeToReplace, nodeToReplace.left)
         else:
-            minNode = self.minimum(nodeToDelete.right)
+            minNode = self.minimum(nodeToReplace.right)
             nodeColor = minNode.color
             node = minNode.right
-            if minNode.parent == nodeToDelete:
+            if minNode.parent == nodeToReplace:
                 node.parent = minNode
             else:
-                self.__transplant(minNode , minNode.right)
-                minNode.right = nodeToDelete.right
+                self.__transplant(minNode, minNode.right)
+                minNode.right = nodeToReplace.right
                 minNode.right.parent = minNode
 
-            self.__transplant(nodeToDelete, minNode)
-            minNode.left = nodeToDelete.left
+            self.__transplant(nodeToReplace, minNode)
+            minNode.left = nodeToReplace.left
             minNode.left.parent = minNode
-            minNode.color = nodeToDelete.color
+            minNode.color = nodeToReplace.color
         if nodeColor == Color.BLACK:
             self.fixDelete(node)

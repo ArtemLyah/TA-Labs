@@ -1,11 +1,23 @@
 from Tree import Tree, Node
-from AVLtree import AVLTree, AVLNode
-from RBtree import RBTree, RBNode, Color
+from avlTree import AVLTree, AVLNode
+from rbTree import RBTree, RBNode, Color
+from basicTree import BasicTree
+from enum import Enum
+
+class TreeType(Enum):
+    BASIC = "BASIC",
+    RB = "RB",
+    AVL = "AVL"
 
 class TreeService:
-    def __init__(self, avlTree: AVLTree, rbTree: RBTree) -> None:
+    def __init__(self, \
+        avlTree=AVLTree(), \
+        rbTree=RBTree(),
+        basicTree=BasicTree() \
+    ) -> None:
         self.avlTree = avlTree
         self.rbTree = rbTree
+        self.basicTree = basicTree
 
     def _getNodesArray(self, root: Node):
         array = [[root]]
@@ -21,22 +33,21 @@ class TreeService:
                     array[-1].append(node.right)
         return array[:-1]
 
-    def printTree(self, isRb=False):
-        if isRb:
+    def printTree(self, treeType: TreeType):
+        if treeType == treeType.RB:
             root = self.rbTree.root
-        else:
+        elif treeType == treeType.AVL:
             root = self.avlTree.root 
-        return self._printNode(root, isRb)
+        elif treeType == treeType.BASIC:
+            root = self.basicTree.root 
+        return self.printNode(root, treeType)
 
-    def printNode(self, node: Node, isRb=False):
-        return self._printNode(node, isRb)
-
-    def _printNode(self, node: Node, isRb=False):
+    def printNode(self, node: Node, treeType: TreeType):
         def stringifyNodes(node: Node):
             if node == None:
                 return "  "
             else:
-                if isRb:
+                if treeType == TreeType.RB:
                     return f"{node.value}{'B' if node.color == Color.BLACK else 'R'}"
                 else:
                     return str(node.value)
@@ -51,16 +62,30 @@ class TreeService:
             elems //= 2
         return result
     
+    def getArray(self, root):
+        return self._getArray(root)
+
+    def _getArray(self, node: Node):
+        array = []
+        if node.left:
+            leftArray = self._getArray(node.left)
+        array.append(node)
+        if node.right:
+            rightArray = self._getArray(node.right)
+        return leftArray + array + rightArray
+
     def insert(self, value):
         self.avlTree.insert(value)
         self.rbTree.insert(value)
+        self.basicTree.insert(value)
 
     def delete(self, value):
         self.avlTree.delete(value)
         self.rbTree.delete(value)
+        self.basicTree.delete(value)
 
-    def search(self, value, isRB=False):
-        if isRB:
-            return self.rbTree.search(value)
-        else:
-            return self.avlTree.search(value)
+    def search(self, value, treeType: TreeType):
+        match treeType:
+            case TreeType.RB: return self.rbTree.search(value)
+            case TreeType.AVL: return self.avlTree.search(value)
+            case TreeType.BASIC: return self.basicTree.search(value)

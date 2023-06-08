@@ -56,6 +56,9 @@ class AVLTree(Tree):
 
     def __delete(self, node: AVLNode, value: int) -> None:
         if node == None: return None
+        elif value == self.root.value:
+            self.root = None
+            return
         elif value < node.value: node.left = self.__delete(node.left, value)
         elif value > node.value: node.right = self.__delete(node.right, value)
         else:
