@@ -139,7 +139,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", "Печера леприкона", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u0421\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430 \u043f\u0435\u0447\u0435\u0440", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u041a\u0456\u043b\u044c\u043a\u0456\u0441\u0442\u044c \u0441\u043a\u0430\u0440\u0431\u0456\u0432 \u0432 \u043f\u0435\u0447\u0435\u0440\u0456", None))
         self.addNodeBtn.setText(QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0434\u0430\u0442\u0438 \u043f\u0435\u0447\u0435\u0440\u0443", None))

@@ -45,7 +45,7 @@ class TreeService:
     def printNode(self, node: Node, treeType: TreeType):
         def stringifyNodes(node: Node):
             if node == None:
-                return "  "
+                return "-"
             else:
                 if treeType == TreeType.RB:
                     return f"{node.value}{'B' if node.color == Color.BLACK else 'R'}"
